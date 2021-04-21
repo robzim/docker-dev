@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rz-meals
+  namespace: rz-meals
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rz-meals
+  template:
+    metadata:
+      labels:
+        app: rz-meals
+        role: rz-meals
+      name: rz-meals
+      namespace: rz-meals
+    spec:
+      containers:
+      - image: {{ .Values.rzmeals.image }}
+        imagePullPolicy: Always
+        name: rz-meals
+        ports:
+        - containerPort: 5000
+          name: rz-port
+          protocol: TCP
+        volumeMounts:
+        - name: foo
+          mountPath: "/foo"
+      volumes:
+      - name: foo
+        secret:
+          secretName: rztest-secret
+          defaultMode: 0400
+
